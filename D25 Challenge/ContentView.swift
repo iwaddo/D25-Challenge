@@ -24,37 +24,48 @@ struct ContentView: View {
     
     
     var body: some View {
-        VStack {
-            Spacer()
-            Text("The computer chooses:")
-                .foregroundColor(.blue)
-                .font(.title)
-            Image(choice[appChoice])
-                .renderingMode(.original)
-                .shadow(radius: 5)
+        ZStack {
+            RadialGradient(stops: [
+                .init(color: Color(red: 0.1, green: 0.2, blue: 0.45), location: 0.3),
+                .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.3)],
+                           center: .top, startRadius: 200, endRadius: 700)
+                .ignoresSafeArea()
             
-            Spacer()
             
-            Text("What will you choose to \(playerToWinOrLose ? "Win" : "Lose")?")
-                .foregroundColor(.blue)
-                .font(.title)
-            
-            ForEach(0..<3) {number in
-                Button {
-                    nextTurn(number)
-                } label: {
-                    Image(choice[number])
-                        .renderingMode(.original)
-                        .shadow(radius: 5)
+            VStack {
+                Spacer()
+                Text("The computer chooses:")
+                    .foregroundColor(.blue)
+                    .font(.title)
+                Image(choice[appChoice])
+                    .renderingMode(.original)
+                    .shadow(radius: 5)
+                
+                Spacer()
+                Spacer()
+                
+                Text("What will you choose to \(playerToWinOrLose ? "Win" : "Lose")?")
+                    .foregroundColor(.blue)
+                    .font(.title)
+                
+                ForEach(0..<3) {number in
+                    Button {
+                        nextTurn(number)
+                    } label: {
+                        Image(choice[number])
+                            .renderingMode(.original)
+                            .shadow(radius: 5)
                         
+                    }
                 }
+                Text("You made the \(correctChoice ? "winning" : "losing") choice")
+                    .foregroundColor(.primary)
+                Text("Your score is \(playerScore) from \(numberOfGuesses) guesses")
+                Spacer()
             }
-            Text("You made the \(correctChoice ? "winning" : "losing") choice")
-            Text("Your score is \(playerScore) from \(numberOfGuesses) guesses")
-            Spacer()
-        }
-        .alert(isPresented: $gameEnd) {
-            Alert(title: Text("End of Game \nYour score is \(playerScore) from \(numberOfGuesses) guesses"), primaryButton: .default(Text("Quit"), action: doNothing), secondaryButton: .destructive(Text("Quit"), action: doNothingAgain))
+            .alert(isPresented: $gameEnd) {
+                Alert(title: Text("End of Game \nYour score is \(playerScore) from \(numberOfGuesses) guesses"), primaryButton: .default(Text("Quit"), action: doNothing), secondaryButton: .destructive(Text("Quit"), action: doNothingAgain))
+            }
         }
     }
 
